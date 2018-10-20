@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import cm, colors, ticker, style
 
-from evolution import Evolution, EvolutionSettings
+from .evolution import Evolution, EvolutionSettings
 
 class Evolution2DSettings(EvolutionSettings):
     def __init__(self, mutation_max_step, population_size, mutation_probability):
