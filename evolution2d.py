@@ -48,7 +48,6 @@ class Evolution2D:
         return (X, Y, Z)
 
 def settings2d_from_file(path):
-    # TODO: This can be abstracted out, so it can be used for all evolutions, no matter the exact specification.
     """ Takes in a csv file containing settings for Function2DEvolution instances. Returns a list of Evolution2DSettings """
     settings = []
     with open(path) as f:
