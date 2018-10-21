@@ -47,6 +47,5 @@ if __name__ == '__main__':
     
     size = int(math.ceil(math.sqrt(len(settings))))
     layout = (size, size)
-    print(f"{function}, {layout}, {settings}")
     view = View2D(function, layout, settings, value_range, step, interval=interval)
     view.run()
