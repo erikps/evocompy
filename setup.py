@@ -8,7 +8,7 @@ setuptools.setup(
     name = 'evocompy',
     version = '0.0.1',
     author = 'erikps',
-    author_email = '',
+    author_email = 'erikps.github@gmail.com',
     description = 'Lightweight evolutionary computation framework',
     long_description = long_description,
     url = 'https://github.com/erikps/evocompy',

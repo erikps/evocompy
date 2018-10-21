@@ -53,6 +53,9 @@ class View2D(View):
         super().__init__(evolutions, layout, self._update, self._setup, interval=interval)
 
     def _setup(self, evolution, ax): 
+        mi, ma = evolution.value_range
+        ax.set_xlim(mi, ma)
+        ax.set_ylim(mi, ma)
         X, Y, Z = evolution.create_values()
         X, Y = np.meshgrid(X, Y)
         ax.contourf(Y, X, Z, locator=ticker.LinearLocator(), cmap=self.cmap)
