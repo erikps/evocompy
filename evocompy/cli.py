@@ -19,10 +19,9 @@ from docopt import docopt
 
 sys.path.append('..')
 
-from evolution2d import Evolution2D, settings2d_from_file, function_dict
-from view import View2D
+from .evolution2d import Evolution2D, settings2d_from_file, function_dict
+from .view import View2D
 
-    """ Sine function using the sum of sin(x) and sin(y). The result is then multiplied by xy to create a falloff as xy approaches 0. """ 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='1.0.0')
     

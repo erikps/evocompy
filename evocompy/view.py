@@ -4,7 +4,7 @@ from matplotlib import ticker, cm, style
 
 import numpy as np
 
-from evolution2d import Evolution2D
+from .evolution2d import Evolution2D
 
 class View:
     """ Evolutionary algorithm related plotting, using matplotlib. 

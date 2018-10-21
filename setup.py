@@ -3,6 +3,8 @@ import setuptools
 
 with open('README.md', 'r') as fh:
     long_description = fh.read()
+print("fp : " + repr(setuptools.find_packages('..')))
+print("fnp : " + repr(setuptools.find_namespace_packages('..')))
 
 setuptools.setup(
     name = 'evocompy',
