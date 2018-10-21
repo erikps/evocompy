@@ -3,7 +3,7 @@
 Usage:
     cli.py -h | --help
     cli.py <function-name> <min> <max> <step> [-f | --from-file] <filepath>
-    cli.py <function-name> <min> <max> <step> [-f | --from-file] <filepath> [-i | --interval] <interval> [-d | --distribution] <distribution> 
+    cli.py <function-name> <min> <max> <step> [-f | --from-file] <filepath> [-i | --interval] <interval> 
 
 Options:
     -h --help        Show this screen.
@@ -19,7 +19,7 @@ from docopt import docopt
 
 sys.path.append('..')
 
-from evolution2d import Evolution2D, settings2d_from_file, distribution_dict, function_dict
+from evolution2d import Evolution2D, settings2d_from_file, function_dict
 from view import View2D
 
     """ Sine function using the sum of sin(x) and sin(y). The result is then multiplied by xy to create a falloff as xy approaches 0. """ 
@@ -34,7 +34,11 @@ if __name__ == '__main__':
         function = function_dict[arguments['<function-name>']]
     
     if arguments['--from-file'] or arguments['-f']:
-        settings = settings2d_from_file(arguments['<filepath>']) 
+        try:
+            settings = settings2d_from_file(arguments['<filepath>']) 
+        except:
+            print ('Invalid input file!')
+            exit(1)
 
     if arguments['--interval'] or arguments['-i']:
         interval = float(arguments['<interval>'])
@@ -44,5 +48,6 @@ if __name__ == '__main__':
     
     size = int(math.ceil(math.sqrt(len(settings))))
     layout = (size, size)
+    print(f"{function}, {layout}, {settings}")
     view = View2D(function, layout, settings, value_range, step, interval=interval)
     view.run()

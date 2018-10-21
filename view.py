@@ -26,9 +26,11 @@ class View:
         self.animation = animation.FuncAnimation(self.fig, self._animate, interval=interval, blit=True, frames=frames)
 
     def run(self):
+        """ Runs the view on the activated matplotlib frontend. """
         plt.show()
 
-    def export_to_mp4(self, filepath):
+    def export(self, filepath):
+        """ Saves the View2D as an animation to the specified path. """  
         self.animation.save(filepath)
 
     def _animate(self, i):
@@ -53,6 +55,9 @@ class View2D(View):
         super().__init__(evolutions, layout, self._update, self._setup, interval=interval)
 
     def _setup(self, evolution, ax): 
+        mi, ma = evolution.value_range
+        ax.set_xlim(mi, ma)
+        ax.set_ylim(mi, ma)
         X, Y, Z = evolution.create_values()
         X, Y = np.meshgrid(X, Y)
         ax.contourf(Y, X, Z, locator=ticker.LinearLocator(), cmap=self.cmap)

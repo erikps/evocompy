@@ -8,15 +8,15 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import cm, colors, ticker, style
 
-from .evolution import Evolution, EvolutionSettings
+from evolution import Evolution, EvolutionSettings
 
 class Evolution2DSettings(EvolutionSettings):
-    def __init__(self, distribution=random.uniform, population_size, mutation_probability):
+    def __init__(self, distribution, population_size, mutation_probability):
         super().__init__(population_size, mutation_probability)
         self.distribution = distribution
 
     def __repr__(self):
-        return super().__repr__() + f" mstep={self.mutation_max_step}"
+        return super().__repr__() + f""
 
 class Evolution2D:
     """ Evolution2D is a wrapper for the Evolution class that allows the creation of an evolutionary algorithm for 2 dimensional functions. """
@@ -53,13 +53,14 @@ def settings2d_from_file(path):
     with open(path) as f:
         reader = csv.reader(f, delimiter=',', quotechar='|')
         for row in reader:
-            settings.append(Evolution2DSettings(float(row[0]), int(row[1]), float(row[2])))
+            settings.append(Evolution2DSettings(to_distribution(row[0]), int(row[1]), float(row[2])))
     return settings 
 
 def to_distribution(string):
     split = string.split(' ')
-    if len(split) != 2:
-        raise IndexError()
+    dist, value = split
+    value = float(value)
+    return distributions.distribution_dict[dist](value)
     
 
 # Example Functions:
@@ -81,7 +82,17 @@ function_dict = {
     'parabola' : parabola,
 }
 
-distribution_dict = {
-    'uniform' : lambda step: random.uniform(-step, step),
-    'normal' : lambda step: random.normalvariate(0, )
-}
+class Distributions:
+    def __init__(self):   
+        self.distribution_dict = {
+            'uniform' : self.uniform,
+            'normal' : self.normal,
+        }
+
+    def uniform(self, step):
+        return lambda: random.uniform(-step, step)
+
+    def normal(self, sigma):
+        return lambda: random.normalvariate(0, sigma)
+
+distributions = Distributions()
