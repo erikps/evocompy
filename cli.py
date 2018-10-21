@@ -3,8 +3,8 @@
 Usage:
     cli.py -h | --help
     cli.py <function-name> <min> <max> <step> [-f | --from-file] <filepath>
-    cli.py <function-name> <min> <max> <step> [-f | --from-file] <filepath> [-i | --interval] <interval>
-    
+    cli.py <function-name> <min> <max> <step> [-f | --from-file] <filepath> [-i | --interval] <interval> [-d | --distribution] <distribution> 
+
 Options:
     -h --help        Show this screen.
     -f --from-file   Create a view from a settings file.
@@ -12,13 +12,14 @@ Options:
 """
 
 import math
+import random
 import sys
 
 from docopt import docopt
 
 sys.path.append('..')
 
-from evolution2d import Evolution2D, settings2d_from_file
+from evolution2d import Evolution2D, settings2d_from_file, distribution_dict, function_dict
 from view import View2D
 
 
@@ -49,11 +50,13 @@ if __name__ == '__main__':
     if arguments['<function-name>'] and arguments['<function-name>'] in function_dict:
         function = function_dict[arguments['<function-name>']]
     
-    if arguments['--from-file']:
+    if arguments['--from-file'] or arguments['-f']:
         settings = settings2d_from_file(arguments['<filepath>']) 
 
-    if arguments['--interval']:
+    if arguments['--interval'] or arguments['-i']:
         interval = float(arguments['<interval>'])
+
+    if arguments['--distribution'] or arguments
 
     value_range = (float(arguments['<min>']), float(arguments['<max>']))
     step = float(arguments['<step>'])

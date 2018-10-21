@@ -11,9 +11,9 @@ from matplotlib import cm, colors, ticker, style
 from .evolution import Evolution, EvolutionSettings
 
 class Evolution2DSettings(EvolutionSettings):
-    def __init__(self, mutation_max_step, population_size, mutation_probability):
+    def __init__(self, distribution=random.uniform, population_size, mutation_probability):
         super().__init__(population_size, mutation_probability)
-        self.mutation_max_step = mutation_max_step
+        self.distribution = distribution
 
     def __repr__(self):
         return super().__repr__() + f" mstep={self.mutation_max_step}"
@@ -33,8 +33,8 @@ class Evolution2D:
 
     def mutate(self, individual):
         """ Returns a point that is clamped in the range but slightly mutated, between -mutation_max_step and mutation_max_step. """
-        x = min(max(individual[0] + random.uniform(-self.settings.mutation_max_step, self.settings.mutation_max_step), self.value_range[0]), self.value_range[1])
-        y = min(max(individual[1] + random.uniform(-self.settings.mutation_max_step, self.settings.mutation_max_step), self.value_range[0]), self.value_range[1])
+        x = min(max(individual[0] + self.settings.distribution(), self.value_range[0]), self.value_range[1])
+        y = min(max(individual[1] + self.settings.distribution(), self.value_range[0]), self.value_range[1])
         return np.array([x, y])
 
     def create_values(self):
@@ -56,4 +56,32 @@ def settings2d_from_file(path):
             settings.append(Evolution2DSettings(float(row[0]), int(row[1]), float(row[2])))
     return settings 
 
+def to_distribution(string):
+    split = string.split(' ')
+    if len(split) != 2:
+        raise IndexError()
+    
 
+# Example Functions:
+
+def sine(individual):
+    """ Sine function using the sum of sin(x) and sin(y). The result is then multiplied by xy to create a falloff as xy approaches 0. """ 
+    x, y = individual    
+    value = (math.sin(x) + math.sin(y)) * x * y
+    return max(0, value)
+
+def parabola(individual):
+    """ Parabola function of x squared plus y squared.  """
+    x, y = individual
+    return x*x + y*y
+
+
+function_dict = {
+    'sine' : sine,
+    'parabola' : parabola,
+}
+
+distribution_dict = {
+    'uniform' : lambda step: random.uniform(-step, step),
+    'normal' : lambda step: random.normalvariate(0, )
+}
