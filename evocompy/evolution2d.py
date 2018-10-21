@@ -57,6 +57,19 @@ def settings2d_from_file(path):
     return settings 
 
 def to_distribution(string):
+    class distribution:
+        def __init__(self):   
+            self.distribution_dict = {
+                'uniform' : self.uniform,
+                'normal' : self.normal,
+            }
+
+        def uniform(self, step):
+            return lambda: random.uniform(-step, step)
+
+        def normal(self, sigma):
+            return lambda: random.normalvariate(0, sigma)
+    distributions = distribution()
     split = string.split(' ')
     dist, value = split
     value = float(value)
@@ -81,18 +94,3 @@ function_dict = {
     'sine' : sine,
     'parabola' : parabola,
 }
-
-class Distributions:
-    def __init__(self):   
-        self.distribution_dict = {
-            'uniform' : self.uniform,
-            'normal' : self.normal,
-        }
-
-    def uniform(self, step):
-        return lambda: random.uniform(-step, step)
-
-    def normal(self, sigma):
-        return lambda: random.normalvariate(0, sigma)
-
-distributions = Distributions()
