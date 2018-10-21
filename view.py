@@ -26,9 +26,11 @@ class View:
         self.animation = animation.FuncAnimation(self.fig, self._animate, interval=interval, blit=True, frames=frames)
 
     def run(self):
+        """ Runs the view on the activated matplotlib frontend. """
         plt.show()
 
-    def export_to_mp4(self, filepath):
+    def export(self, filepath):
+        """ Saves the View2D as an animation to the specified path. """  
         self.animation.save(filepath)
 
     def _animate(self, i):
