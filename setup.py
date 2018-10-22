@@ -13,7 +13,7 @@ setuptools.setup(
     long_description = long_description,
     url = 'https://github.com/erikps/evocompy',
     packages = setuptools.find_packages(exclude=['functions.py']),
-    scripts=['evocompy/functions'],
+    scripts=['evocompy/functions.py'],
     classifiers = [
             'Programming Language :: Python :: 3',
             'License :: OSI approved :: MIT License',
