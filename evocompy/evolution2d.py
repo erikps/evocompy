@@ -8,47 +8,55 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import cm, colors, ticker, style
 
-from .evolution import Evolution, EvolutionSettings
+from .evolution import Evolution, mutation_operator, crossover_operator, cutoff_selection
 
-class Evolution2DSettings(EvolutionSettings):
+class Evolution2DSettings:
     def __init__(self, distribution, population_size, mutation_probability):
-        super().__init__(population_size, mutation_probability)
         self.distribution = distribution
+        self.population_size = population_size
+        self.mutation_probability = mutation_probability
 
     def __repr__(self):
         return super().__repr__() + f""
 
-class Evolution2D:
+
+class Evolution2D(Evolution):
     """ Evolution2D is a wrapper for the Evolution class that allows the creation of an evolutionary algorithm for 2 dimensional functions. """
-    def __init__ (self, function, settings, value_range, step):
+    def __init__ (self, function, settings, value_range, value_step, writer=None):
         self.function = function
         self.settings = settings
         self.value_range = value_range
-        self.step = step
-        self.evolution = Evolution(settings, self.random, self.function, self.mutate)
+        self.value_step = value_step
+        super().__init__(self.settings.population_size, self._random, self.function, cutoff_selection, [self._mutate2d], writer=writer)
         
-    def random (self):
+    def _random (self):
         """ Returns a random point within the value range. """
         return np.array([random.uniform(self.value_range[0], self.value_range[1]), random.uniform(self.value_range[0], self.value_range[1])])
 
-    def mutate(self, individual):
-        """ Returns a point that is clamped in the range but slightly mutated, between -mutation_max_step and mutation_max_step. """
-        x = min(max(individual[0] + self.settings.distribution(), self.value_range[0]), self.value_range[1])
-        y = min(max(individual[1] + self.settings.distribution(), self.value_range[0]), self.value_range[1])
-        return np.array([x, y])
-
     def create_values(self):
         """ Creates and returns a tuple (X, Y, Z) of values. While X and Y are created based on the value range and step properties, Z is created by computing f([x, y])."""
-        X = np.arange(self.value_range[0], self.value_range[1], self.step)
-        Y = np.arange(self.value_range[0], self.value_range[1], self.step)
+        X = np.arange(self.value_range[0], self.value_range[1], self.value_step)
+        Y = np.arange(self.value_range[0], self.value_range[1], self.value_step)
         Z = np.zeros((len(X), len(Y)))
         for ix, x in enumerate(X):
             for iy, y in enumerate(Y):
                 Z[ix][iy] = self.function(np.array([x, y]))
         return (X, Y, Z)
 
+    def _mutate2d(self, population, population_size):
+        """ Returns a point that is clamped in the range but slightly mutated, between -mutation_max_step and mutation_max_step. """
+        new_pop = []
+        for individual in population:
+            x = min(max(individual[0] + self.settings.distribution(), self.value_range[0]), self.value_range[1])
+            y = min(max(individual[1] + self.settings.distribution(), self.value_range[0]), self.value_range[1])
+            new_pop.append(np.array([x, y]))
+        return np.array(new_pop)
+
+# IO Helper Functions:
+
 def settings2d_from_file(path):
-    """ Takes in a csv file containing settings for Function2DEvolution instances. Returns a list of Evolution2DSettings """
+    """ Takes in a csv file containing settings for Function2DEvolution instances. Returns a list of Evolution2DSettings 
+    """
     settings = []
     with open(path) as f:
         reader = csv.reader(f, delimiter=',', quotechar='|')

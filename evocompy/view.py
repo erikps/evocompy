@@ -20,6 +20,7 @@ class View:
         self.rows, self.columns = layout
         self.teardown = teardown
         self.fig, self.axes = plt.subplots(self.rows, self.columns)
+        self.fig.canvas.mpl_connect('close_event', self._finalize)
         self.axes = np.array([self.axes]).flatten()
         for i, evolution in enumerate(self.evolutions):
             setup(evolution, self.axes[i])
@@ -42,17 +43,21 @@ class View:
                 self.teardown(ax, n)
         return points
 
+    def _finalize(self, evt):
+        for evolution in self.evolutions:
+            evolution.finalize_writer()
+
 class View2D(View):
     """ View for evolutions of 2 dimensional functions.
     """
-    def __init__(self, function, layout, settings, value_range, value_step, cmap=cm.Blues, interval=50):
+    def __init__(self, function, layout, settings, value_range, value_step, cmap=cm.Blues, interval=50, frames=None, writer=None):
         evolutions = []
         for setting in settings:
-            evolution = Evolution2D(function, setting, value_range, value_step)
+            evolution = Evolution2D(function, setting, value_range, value_step, writer=writer)
             evolutions.append(evolution)
         self.cmap = cmap
         self._to_remove = []
-        super().__init__(evolutions, layout, self._update, self._setup, interval=interval)
+        super().__init__(evolutions, layout, self._update, self._setup, interval=interval, frames=frames)
 
     def _setup(self, evolution, ax): 
         mi, ma = evolution.value_range
@@ -63,7 +68,7 @@ class View2D(View):
         ax.contourf(Y, X, Z, locator=ticker.LinearLocator(), cmap=self.cmap)
 
     def _update(self, evolution, ax, i):
-        transposed = evolution.evolution.current_population.transpose()
-        points = (ax.scatter(transposed[0], transposed[1], marker='.', c='orange')) 
-        evolution.evolution.step()
+        transposed = evolution.current_population.transpose()
+        points = ax.scatter(transposed[0], transposed[1], marker='.', c='orange') 
+        evolution.step()
         return points
