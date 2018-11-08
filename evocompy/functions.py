@@ -54,10 +54,6 @@ if __name__ == '__main__':
     
     size = int(math.ceil(math.sqrt(len(settings))))
     layout = (size, size)
-<<<<<<< HEAD
-    view = View2D(function, layout, settings, value_range, step, interval=interval)
-    view.run()
-=======
 
     headers = ['fittest', 'mean', 'median']
     formatter = lambda evolution: [round(evolution.get_fittest_individual()[1], DIGITS), round(evolution.get_mean_fitness(), DIGITS), round(evolution.get_median_fitness(), DIGITS)]
@@ -79,4 +75,3 @@ if __name__ == '__main__':
     else: 
         view = View2D(function, layout, settings, value_range, step, interval=interval, writer=CSVWriter('functions.csv', formatter, headers))
         view.run()
->>>>>>> f8acefb7c4e41d924ba72881a681c41ed6627908
