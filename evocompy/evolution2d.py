@@ -89,7 +89,7 @@ def to_distribution(string):
 def sine(individual):
     """ Sine function using the sum of sin(x) and sin(y). The result is then multiplied by xy to create a falloff as xy approaches 0. """ 
     x, y = individual    
-    value = (math.sin(x) + math.sin(y)) * x * y
+    value = (2 + math.sin(x) + math.sin(y)) * x * y
     return max(0, value)
 
 def parabola(individual):
