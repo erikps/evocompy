@@ -12,8 +12,8 @@ setuptools.setup(
     description = 'Lightweight evolutionary computation framework',
     long_description = long_description,
     url = 'https://github.com/erikps/evocompy',
-    packages = setuptools.find_packages(exclude=['functions.py']),
-    scripts=['evocompy/functions'],
+    packages = setuptools.find_packages(exclude=['evocompy/functions.py']),
+    scripts=['evocompy/functions.py', 'evocompy/examples/tsp.py'],
     classifiers = [
             'Programming Language :: Python :: 3',
             'License :: OSI approved :: MIT License',
