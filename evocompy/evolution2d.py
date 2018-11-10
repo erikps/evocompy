@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import cm, colors, ticker, style
 
-from .evolution import Evolution, mutation_operator, crossover_operator, cutoff_selection
+from .evolution import Evolution, mutation_operator, crossover_operator, cutoff_selection, roulette_wheel_selection
 
 class Evolution2DSettings:
     def __init__(self, distribution, population_size, mutation_probability):
@@ -97,8 +97,12 @@ def parabola(individual):
     x, y = individual
     return x*x + y*y
 
+def exp(individual):
+    x, y = individual
+    return math.sin(x) * y * x
 
 function_dict = {
     'sine' : sine,
     'parabola' : parabola,
+    'exp': exp
 }

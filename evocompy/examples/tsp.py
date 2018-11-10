@@ -3,7 +3,7 @@ Usage:
     tsp.py <nodecount> <popsize> <outputfile>
 """
 import random
-
+    
 import docopt
 import numpy as np
 import matplotlib.pyplot as plt

@@ -78,7 +78,25 @@ def cutoff_selection(population, f, proportional):
         new_pop.append(selected[i%len(selected)])
     return np.array(new_pop)
 
+
 def roulette_wheel_selection(population, f, proportional):
+    """ Implementation of the roulette wheel selection method. """
+    S = sum(map(f, population))
+    new_population = []
+    for _ in population:
+        alpha, iSum = random.uniform(0, S), 0
+        chosen = None
+        for individual2 in population:
+            iSum += f(individual2)
+            chosen = individual2
+            if iSum >= alpha:
+                break
+        new_population.append(chosen)
+
+    return np.array(new_population)
+
+
+def roulette_wheel_selection_orig(population, f, proportional):
     """ Implementation of the roulette wheel selection method. """
     S = sum(map(f, population))
     new_population = []
