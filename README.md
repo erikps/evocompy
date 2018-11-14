@@ -21,9 +21,3 @@ You can then run the newly constructed algorithm using the `step()` method. This
 * Numpy
 * Docopt for the command line interface
 * Matplotlib for displaying results
-
-## Todo
-
-* Implement smater ways to perform selection to allow for more complex analysis.
-* Implement support for schemata (á la Goldberg) to allow for more complex analysis.
-
