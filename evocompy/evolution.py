@@ -72,7 +72,9 @@ class Evolution:
 
 def cutoff_selection(population, f, proportional):
     """ Simple and naive selection method that simply cuts of the lower half of the population ordered by fitness. """
-    selected = list(sorted(population, key=f, reverse=not proportional)[int(len(population)/2):])
+    selected = list(
+        sorted(population, key=f, reverse=not proportional
+        )[int(len(population)/2):])
     new_pop = []
     for i, _ in enumerate(population):
         new_pop.append(selected[i%len(selected)])
@@ -91,7 +93,6 @@ def roulette_wheel_selection(population, f, proportional):
             if iSum >= alpha:
                 break
         new_population.append(chosen)
-
     return np.array(new_population)
 
 # Genetic Operator Decorators:
@@ -101,7 +102,7 @@ def mutation_operator(m):
         A mutation function is applied to each individual separately.
     """
     def result(pop, pop_size):
-        return map(m, pop)
+        return np.array(list(map(m, pop)))
     return result
 
 def crossover_operator(f, sort=True, **kwargs):
