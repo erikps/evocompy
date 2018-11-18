@@ -23,7 +23,7 @@ class View:
         self.fig.canvas.mpl_connect('close_event', self._finalize)
         self.axes = np.array([self.axes]).flatten()
         for i, evolution in enumerate(self.evolutions):
-            setup(evolution, self.axes[i])
+            setup(evolution, self.axes[i], self.fig)
         self.animation = animation.FuncAnimation(self.fig, self._animate, interval=interval, blit=True, frames=frames)
 
     def run(self):
@@ -57,18 +57,29 @@ class View2D(View):
             evolutions.append(evolution)
         self.cmap = cmap
         self._to_remove = []
+        self.points = None
+        self.pause = True
         super().__init__(evolutions, layout, self._update, self._setup, interval=interval, frames=frames)
 
-    def _setup(self, evolution, ax): 
+    def _setup(self, evolution, ax, fig): 
         mi, ma = evolution.value_range
         ax.set_xlim(mi, ma)
         ax.set_ylim(mi, ma)
         X, Y, Z = evolution.create_values()
         X, Y = np.meshgrid(X, Y)
+        fig.canvas.mpl_connect('button_press_event', self._onClick)
         ax.contourf(Y, X, Z, locator=ticker.LinearLocator(), cmap=self.cmap)
+        self._animation(evolution, ax)
 
     def _update(self, evolution, ax, i):
+        if not self.pause:
+            self._animation(evolution, ax)
+            evolution.step()    
+        return self.points
+
+    def _animation(self, evolution, ax):
         transposed = evolution.current_population.transpose()
-        points = ax.scatter(transposed[0], transposed[1], marker='.', c='orange') 
-        evolution.step()
-        return points
+        self.points = ax.scatter(transposed[0], transposed[1], marker='.', c='orange') 
+    
+    def _onClick(self, event):
+        self.pause ^= True

@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import cm, colors, ticker, style
 
-from .evolution import Evolution, mutation_operator, crossover_operator, cutoff_selection
+from .evolution import Evolution, mutation_operator, crossover_operator, cutoff_selection, roulette_wheel_selection
 
 class Evolution2DSettings:
     def __init__(self, distribution, population_size, mutation_probability):
@@ -89,7 +89,7 @@ def to_distribution(string):
 def sine(individual):
     """ Sine function using the sum of sin(x) and sin(y). The result is then multiplied by xy to create a falloff as xy approaches 0. """ 
     x, y = individual    
-    value = (math.sin(x) + math.sin(y)) * x * y
+    value = (2 + math.sin(x) + math.sin(y)) * x * y
     return max(0, value)
 
 def parabola(individual):
@@ -97,8 +97,12 @@ def parabola(individual):
     x, y = individual
     return x*x + y*y
 
+def exp(individual):
+    x, y = individual
+    return math.sin(x) * y * x
 
 function_dict = {
     'sine' : sine,
     'parabola' : parabola,
+    'exp': exp
 }

@@ -4,7 +4,7 @@ Usage:
 """
 import csv
 import random
-
+    
 import docopt
 import numpy as np
 import matplotlib.pyplot as plt
