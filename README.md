@@ -1,9 +1,14 @@
 # evocompy
 Lightweight evolutionary computation algorithm.
 
-## Usage
+## Installation
 
-### Basic
+This library can be easily installed through the PIP interface:
+```sh
+pip install git+https://github.com/erikps/evocompy.git
+```
+
+## Basic Usage
 
 The Evolution class is the centerpiece of this library. You can create an instance of this class to construct an evolutionary algorithm. To initialize it, there are some required arguments:
 * The (initial) population size.
