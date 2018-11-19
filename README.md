@@ -1,5 +1,6 @@
 # evocompy
-Lightweight evolutionary computation algorithm.
+
+Small library that enables the user to quickly construct evolutionary algorithms.
 
 ## Installation
 
