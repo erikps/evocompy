@@ -6,7 +6,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name = 'evocompy',
-    version = '0.0.1',
+    version = '0.1.0',
     author = 'erikps',
     author_email = 'erikps.github@gmail.com',
     description = 'Lightweight evolutionary computation framework',
