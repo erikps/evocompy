@@ -137,5 +137,5 @@ if __name__ == '__main__':
     tsp = TSP(int(arguments['<nodecount>']))
     evolution = get_evolution(tsp, int(arguments['<popsize>']), arguments['<outputfile>'], float(arguments['<mprob>'])/100, int(arguments['<mnum>']))
     animation = TSPAnimation(tsp, evolution)
-    view = View([evolution], (1, 1), animation.update, animation.setup, blit=False, pause_generations=[2, 51, 101, 501, 1001])
+    view = View([evolution], (1, 1), animation.update, animation.setup, blit=False)
     view.run()
