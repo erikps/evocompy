@@ -9,7 +9,7 @@ This library can be easily installed through the PIP interface:
 pip install git+https://github.com/erikps/evocompy.git
 ```
 
-## Basic Usage
+## Usage
 
 The Evolution class is the centerpiece of this library. You can create an instance of this class to construct an evolutionary algorithm. To initialize it, there are some required arguments:
 * The (initial) population size.
@@ -23,7 +23,7 @@ The Evolution class assumes a generational model, a steady-state approach is not
 You can then run the newly constructed algorithm using the `step()` method. This will run the algorithm one time, creating a new generation. 
   At any time, queries about the current fitness landscape can be made, using the `get_mean_fitness()` and `get_median_fitness()` functions can be made. The fittest individual can be accessed by `get_fittest_individual()` which returns a tuple including the individual and its respective fitness. 
 
-## Used Libraries
+## Dependencies
 * Numpy
 * Docopt for the command line interface
 * Matplotlib for displaying results
