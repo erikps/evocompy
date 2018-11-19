@@ -1,4 +1,4 @@
-# evocompy
+# Evocompy
 
 Small library that enables the user to quickly construct evolutionary algorithms.
 
