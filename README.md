@@ -1,6 +1,7 @@
 # Evocompy
 
 Small library that enables the user to quickly construct evolutionary algorithms.
+A german version of this readme can be found [here](https://github.com/erikps/evocompy/wiki/%5BDE%5D-Dokumentation)
 
 ## Installation
 
