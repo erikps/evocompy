@@ -11,7 +11,7 @@ class View:
         The animate constructor is a higher order function that takes 
     """
     
-    def __init__(self, evolutions, layout, animate, setup, interval=50, teardown=None, frames=None):
+    def __init__(self, evolutions, layout, animate, setup, interval=50, teardown=None, frames=None, blit=True, pause_generations=[1]):
         if not layout[0]*layout[1] >= len(evolutions):
             raise ValueError("Not enough space in specified layout. ")               
         
@@ -19,12 +19,15 @@ class View:
         self.animate = animate        
         self.rows, self.columns = layout
         self.teardown = teardown
+        self.pause_generations = pause_generations
         self.fig, self.axes = plt.subplots(self.rows, self.columns)
         self.fig.canvas.mpl_connect('close_event', self._finalize)
         self.axes = np.array([self.axes]).flatten()
+        self.pause = False
         for i, evolution in enumerate(self.evolutions):
             setup(evolution, self.axes[i], self.fig)
-        self.animation = animation.FuncAnimation(self.fig, self._animate, interval=interval, blit=True, frames=frames)
+        self.animation = animation.FuncAnimation(self.fig, self._animate, interval=interval, blit=blit, frames=frames)
+        self.fig.canvas.mpl_connect('button_press_event', self._onClick)
 
     def run(self):
         """ Runs the view on the activated matplotlib frontend. """
@@ -37,7 +40,10 @@ class View:
     def _animate(self, i):
         points = []
         for n, evolution in enumerate(self.evolutions):
-            points.append(self.animate(evolution, self.axes[n], i))
+            if not self.pause:
+                points.append(self.animate(evolution, self.axes[n], self.fig, i))
+            if evolution.generation in self.pause_generations:
+                self.pause = True
         if self.teardown is not None:
             for n, ax in enumerate(self.axes):
                 self.teardown(ax, n)
@@ -46,6 +52,9 @@ class View:
     def _finalize(self, evt):
         for evolution in self.evolutions:
             evolution.finalize_writer()
+        
+    def _onClick(self, event):
+        self.pause ^= True
 
 class View2D(View):
     """ View for evolutions of 2 dimensional functions.
@@ -58,7 +67,6 @@ class View2D(View):
         self.cmap = cmap
         self._to_remove = []
         self.points = None
-        self.pause = True
         super().__init__(evolutions, layout, self._update, self._setup, interval=interval, frames=frames)
 
     def _setup(self, evolution, ax, fig): 
@@ -67,19 +75,15 @@ class View2D(View):
         ax.set_ylim(mi, ma)
         X, Y, Z = evolution.create_values()
         X, Y = np.meshgrid(X, Y)
-        fig.canvas.mpl_connect('button_press_event', self._onClick)
         ax.contourf(Y, X, Z, locator=ticker.LinearLocator(), cmap=self.cmap)
         self._animation(evolution, ax)
 
-    def _update(self, evolution, ax, i):
-        if not self.pause:
-            self._animation(evolution, ax)
-            evolution.step()    
+    def _update(self, evolution, ax, fig, i):
+        self._animation(evolution, ax)
+        evolution.step()    
         return self.points
 
     def _animation(self, evolution, ax):
         transposed = evolution.current_population.transpose()
         self.points = ax.scatter(transposed[0], transposed[1], marker='.', c='orange') 
-    
-    def _onClick(self, event):
-        self.pause ^= True
+

@@ -109,15 +109,17 @@ class TSPAnimation:
         self.lines = None
         self.text = None
 
-    def update(self, evolution, ax, i):
+    def update(self, evolution, ax, fig, i):
+        # cleanup
         if self.lines is not None:
             for line in self.lines:
                 line.remove()
         if self.text is not None:
             self.text.remove()
         fittest, fitness = evolution.get_fittest_individual()
-        self.text = ax.text(0, 0, f"generation: {evolution.generation}; fitness: {fitness}")
+        self.text = fig.text(0.125, 0.025, f"generation: {evolution.generation}; fitness: {fitness}")
         print(f"{evolution.generation} : {fitness}")
+
         # The first element of the list has to be appended at the end again, so that it entails the full hamilton cycle.
         fittest_cycle = np.append(fittest, [fittest[0]], axis=0)
         fittest_cycle = np.array([self.tsp.nodes[index] for index in fittest_cycle]) # Convert indices to actual nodes. 
@@ -126,7 +128,7 @@ class TSPAnimation:
         evolution.step()
         
 
-    def setup(self, evolution, ax):
+    def setup(self, evolution, ax, figure):
         ax.scatter(*list(zip(*self.tsp.nodes)))
 
 
@@ -135,5 +137,5 @@ if __name__ == '__main__':
     tsp = TSP(int(arguments['<nodecount>']))
     evolution = get_evolution(tsp, int(arguments['<popsize>']), arguments['<outputfile>'], float(arguments['<mprob>'])/100, int(arguments['<mnum>']))
     animation = TSPAnimation(tsp, evolution)
-    view = View([evolution], (1, 1), animation.update, animation.setup, blit=False)
+    view = View([evolution], (1, 1), animation.update, animation.setup, blit=False, pause_generations=[2, 51, 101, 501, 1001])
     view.run()
