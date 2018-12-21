@@ -5,7 +5,7 @@ A german version of this readme can be found [here](https://github.com/erikps/ev
 
 ## Installation
 
-This library can be easily installed through the PIP interface:
+This library can be easily installed through the pip command line tool:
 ```sh
 pip install git+https://github.com/erikps/evocompy.git
 ```
