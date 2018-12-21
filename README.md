@@ -17,7 +17,7 @@ The Evolution class is the centerpiece of this library. You can create an instan
 * A random function that returns a randomized genotype / solution
 * A fitness function that evaluates a solution. Note that a genotype-phenotype-mapping has to be implemented manually inside of this function as it takes a genotype as input.
 * The selection scheme to be applied. There are some already provied, e.g. cutoff and roulette-wheel selection. The selection method is responsible for selecting a subset of the population, and based thereof create a new population (the next generation).
-* Lastly, an iterable of genetic operators is required. A genetic operator takes in a population and somehow mutates or mixes the genepool. Generally mutation and crossover of some form are utilized. Note that mutation probability has to be handled seperatley of this implementation.
+* Lastly, an iterable of genetic operators is required. A genetic operator takes in a population and somehow mutates or mixes the genepool. Generally mutation and crossover of some form are utilized. Note that mutation probability is not handled by this implementation.
 
 The Evolution class assumes a generational model, a steady-state approach is not supported.
 
