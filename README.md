@@ -22,7 +22,7 @@ The Evolution class is the centerpiece of this library. You can create an instan
 The Evolution class assumes a generational model, a steady-state approach is not supported.
 
 You can then run the newly constructed algorithm using the `step()` method. This will run the algorithm one time, creating a new generation. 
-  At any time, queries about the current fitness landscape can be made, using the `get_mean_fitness()` and `get_median_fitness()` functions can be made. The fittest individual can be accessed by `get_fittest_individual()` which returns a tuple including the individual and its respective fitness. 
+  At any time, queries about the current fitness landscape can be made, using the `get_mean_fitness()` and `get_median_fitness()` functions. The fittest individual can be accessed by `get_fittest_individual()` which returns a tuple including the individual and its respective fitness. 
 
 ## Dependencies
 * Numpy
